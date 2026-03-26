@@ -2,6 +2,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from config import TELEGRAM_TOKEN
 from agent import ask_ai
 from loop import auto_loop
+from miner import auto_mining_loop
 import threading
 from tools.wallet import address
 
@@ -96,5 +97,9 @@ app.add_handler(CommandHandler("wallet", wallet))
 
 app.add_handler(MessageHandler(filters.TEXT, handle))
 
+threading.Thread(
+    target=auto_mining_loop,
+    daemon=True
+).start()
 
 app.run_polling()
