@@ -6,19 +6,12 @@ RUN = True
 
 def auto_loop():
 
-    while RUN:
+    while True:
 
-        try:
+        ask_ai("mine")
 
-            print("AI thinking...")
+        time.sleep(10)
 
-            res = ask_ai(
-                "check mining status and run mining or claim if needed"
-            )
+        ask_ai("claim")
 
-            print(res)
-
-        except Exception as e:
-            print(e)
-
-        time.sleep(20)
+        time.sleep(30)
