@@ -3,10 +3,18 @@ from config import TELEGRAM_TOKEN
 from agent import ask_ai
 from loop import auto_loop
 import threading
+from tools.wallet import address
 
 AUTO = False
 
+async def wallet(update, ctx):
 
+    addr = address()
+
+    await update.message.reply_text(
+        f"Wallet:\n{addr}"
+    )
+    
 async def start(update, ctx):
     await update.message.reply_text("Bot ready")
 
@@ -84,6 +92,7 @@ app.add_handler(CommandHandler("claim", claim))
 app.add_handler(CommandHandler("auto", auto))
 app.add_handler(CommandHandler("stop", stop))
 app.add_handler(CommandHandler("status", status))
+app.add_handler(CommandHandler("wallet", wallet))
 
 app.add_handler(MessageHandler(filters.TEXT, handle))
 
