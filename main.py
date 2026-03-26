@@ -7,13 +7,17 @@ async def handle(update, ctx):
 
     text = update.message.text
 
-    reply = ask_ai(text)
+    res = ask_ai(text)
 
-    await update.message.reply_text(reply)
+    await update.message.reply_text(res)
 
 
-app = Application.builder().token(TELEGRAM_TOKEN).build()
+app = Application.builder().token(
+    TELEGRAM_TOKEN
+).build()
 
-app.add_handler(MessageHandler(filters.TEXT, handle))
+app.add_handler(
+    MessageHandler(filters.TEXT, handle)
+)
 
 app.run_polling()
