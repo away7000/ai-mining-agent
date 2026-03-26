@@ -1,23 +1,36 @@
 from openai import OpenAI
 from config import OPENROUTER_KEY, MODEL
 from skill_loader import load_skill
+from router import run_tool
+import json
+
 
 client = OpenAI(
     api_key=OPENROUTER_KEY,
     base_url="https://openrouter.ai/api/v1"
 )
 
-skill_text = load_skill()
+
+skill = load_skill()
 
 
-SYSTEM_PROMPT = f"""
-You are AI Agent.
+SYSTEM = f"""
+You are AI Mining Agent
 
-Use this skill:
+You can use tools.
 
-{skill_text}
+Skill:
 
-Always follow the skill instructions.
+{skill}
+
+When you need tool:
+
+return JSON
+
+{{
+ "tool": "http_get",
+ "args": {{}}
+}}
 """
 
 
@@ -26,9 +39,27 @@ def ask_ai(text):
     res = client.chat.completions.create(
         model=MODEL,
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": SYSTEM},
             {"role": "user", "content": text}
         ]
     )
 
-    return res.choices[0].message.content
+    msg = res.choices[0].message.content
+
+    try:
+
+        data = json.loads(msg)
+
+        if "tool" in data:
+
+            result = run_tool(
+                data["tool"],
+                data.get("args", {})
+            )
+
+            return str(result)
+
+    except:
+        pass
+
+    return msg
