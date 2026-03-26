@@ -23,18 +23,17 @@ Your job:
 - always check claim
 - always follow skill
 - never stop mining
-- use tools if needed
 
 Skill:
 
 {skill}
 
-If you need tool return JSON:
+If you need tool return JSON like this:
 
-{
+{{
  "tool": "http_get",
- "args": {}
-}
+ "args": {{}}
+}}
 """
 
 
