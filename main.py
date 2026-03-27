@@ -42,10 +42,18 @@ async def mine_cmd(update, ctx):
 
     await update.message.reply_text("mining...")
 
+    from miner_contract import mine
+
     try:
-        tx = mine()
+
+        blocks = [0,1,2,3,4,5,6,7,8,9]
+
+        tx = mine(blocks)
+
         await update.message.reply_text(tx)
+
     except Exception as e:
+
         await update.message.reply_text(str(e))
 
 async def claim(update, ctx):
@@ -141,9 +149,15 @@ async def stop(update, ctx):
 
 
 async def handle(update, ctx):
+
     text = update.message.text
+
+    if text.startswith("/"):
+        return
+
     res = ask_ai(text)
-    await update.message.reply_text(str(res))
+
+    await update.message.reply_text(res)
 
 
 async def rewards(update, ctx):
