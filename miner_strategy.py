@@ -93,29 +93,23 @@ def auto_strategy():
                 continue
 
             # deploy near end
-            if 8 > remain > 2 and not DEPLOYED:
+            if remain <= 15 and remain >= 5 and not DEPLOYED:
 
-                n = random_count()
+            blocks = pick_random_blocks(random_count())
 
-                blocks = pick_random_blocks(n)
-
-                print("RANDOM", blocks)
-
-                print("DEPLOY", block)
+            print("DEPLOY", blocks)
 
                 try:
 
-                    tx = mine([block])
+                    tx = mine(blocks)
 
-                    print(tx)
+                    print("TX", tx)
 
-                    DEPLOYED = True
+             DEPLOYED = True
 
                 except Exception as e:
 
                     print("DEPLOY ERR", e)
-
-                time.sleep(5)
 
             # claim after end
             if remain < 1:
