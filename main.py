@@ -1,3 +1,4 @@
+import os
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from config import TELEGRAM_TOKEN
 from agent import ask_ai
@@ -8,7 +9,7 @@ from miner import run_mining, auto_mining_loop
 
 AUTO = False
 thread = None
-
+TELEGRAM_TOKEN = os.environ["TELEGRAM_TOKEN"]
 
 async def start(update, ctx):
     await update.message.reply_text("Bot ready")
