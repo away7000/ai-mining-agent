@@ -10,9 +10,7 @@ def get_rewards():
 
     url = f"{API}/user/{addr}/rewards"
 
-    r = requests.get(url).json()
-
-    return r
+    return requests.get(url).json()
 
 
 def get_user():
@@ -21,6 +19,4 @@ def get_user():
 
     url = f"{API}/user/{addr}"
 
-    r = requests.get(url).json()
-
-    return r
+    return requests.get(url).json()
