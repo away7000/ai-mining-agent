@@ -5,9 +5,11 @@ from miner import run_mining, auto_mining_loop
 
 def run_mining():
 
+    print("RUN MINING")
+
     urls = parse_skill()
 
-    print("URLS:", urls)
+    print(urls)
 
     for url in urls:
 
