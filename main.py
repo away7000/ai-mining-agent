@@ -1,8 +1,8 @@
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from config import TELEGRAM_TOKEN
 from agent import ask_ai
-from tools.wallet import address, balance
 from miner import auto_mining_loop
+from tools.wallet import address, balance
 import threading
 
 AUTO = False
@@ -14,27 +14,25 @@ async def start(update, ctx):
 
 
 async def mine(update, ctx):
+    await update.message.reply_text("mining...")
     res = ask_ai("mine")
-    await update.message.reply_text(res)
+    await update.message.reply_text(str(res))
 
 
 async def claim(update, ctx):
     res = ask_ai("claim")
-    await update.message.reply_text(res)
+    await update.message.reply_text(str(res))
 
 
 async def status(update, ctx):
     res = ask_ai("status")
-    await update.message.reply_text(res)
+    await update.message.reply_text(str(res))
 
 
 async def wallet(update, ctx):
     addr = address()
     bal = balance()
-
-    await update.message.reply_text(
-        f"{addr}\nBalance: {bal}"
-    )
+    await update.message.reply_text(f"{addr}\nBalance: {bal}")
 
 
 async def auto(update, ctx):
@@ -65,7 +63,7 @@ async def stop(update, ctx):
 async def handle(update, ctx):
     text = update.message.text
     res = ask_ai(text)
-    await update.message.reply_text(res)
+    await update.message.reply_text(str(res))
 
 
 app = Application.builder().token(
