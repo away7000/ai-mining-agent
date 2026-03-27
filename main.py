@@ -24,11 +24,11 @@ async def mine(update, ctx):
 
     await update.message.reply_text("mining...")
 
+    from miner_contract import mine
+
     try:
 
-        from miner_contract import mine
-
-        tx = mine([0])   # block default
+        tx = mine([0])  # block default
 
         await update.message.reply_text(str(tx))
 
