@@ -1,6 +1,8 @@
 import re
 from skill_loader import load_skill
+from tools.wallet import address
 
+WALLET = address()
 
 def parse_skill():
 
