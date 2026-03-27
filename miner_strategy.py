@@ -1,5 +1,6 @@
 import time
 import requests
+import random
 
 from miner_contract import mine, claim_eth
 
@@ -14,23 +15,38 @@ def get_round():
     return requests.get(API).json()
 
 
-def pick_best_block(data):
+def pick_blocks(data, n=3):
 
     blocks = data["blocks"]
 
-    best = None
-    best_val = None
+    arr = []
 
     for b in blocks:
 
-        val = int(b["deployed"])
+        arr.append(
+            (int(b["deployed"]), b["id"])
+        )
 
-        if best_val is None or val < best_val:
-            best_val = val
-            best = b["id"]
+    arr.sort()
 
-    return best
+    result = []
 
+    for i in range(n):
+        result.append(arr[i][1])
+
+    return result
+    
+def pick_random_blocks(n=3):
+
+    blocks = list(range(25))
+
+    random.shuffle(blocks)
+
+    return blocks[:n]
+
+def random_count():
+
+    return random.choice([1, 2, 3, 4, 5])
 
 def should_play(data):
 
@@ -79,7 +95,11 @@ def auto_strategy():
             # deploy near end
             if 8 > remain > 2 and not DEPLOYED:
 
-                block = pick_best_block(data)
+                n = random_count()
+
+                blocks = pick_random_blocks(n)
+
+                print("RANDOM", blocks)
 
                 print("DEPLOY", block)
 
