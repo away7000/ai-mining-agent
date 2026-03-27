@@ -8,6 +8,7 @@ API = "https://api.mineloot.app/api/round/current"
 
 LAST_ROUND = None
 DEPLOYED = False
+AUTO_CLAIM = False
 
 
 def get_round():
@@ -82,7 +83,7 @@ def auto_strategy():
 
 
             # claim
-            if remain < 1 and DEPLOYED:
+            if remain < 1 and DEPLOYED and AUTO_CLAIM:
 
                 try:
 
