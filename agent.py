@@ -3,17 +3,15 @@ from config import OPENROUTER_KEY, MODEL
 from skill_loader import load_skill
 from router import run_tool
 import json
+import os
 
+OPENROUTER_KEY = os.environ["OPENROUTER_KEY"]
+MODEL = os.environ.get("MODEL", "openrouter/auto")
 
 client = OpenAI(
     api_key=OPENROUTER_KEY,
-    base_url="https://openrouter.ai/api/v1",
-    default_headers={
-        "HTTP-Referer": "https://localhost",
-        "X-Title": "mining-agent"
-    }
+    base_url="https://openrouter.ai/api/v1"
 )
-
 
 skill = load_skill()
 
