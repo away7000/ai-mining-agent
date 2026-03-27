@@ -1,11 +1,10 @@
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from config import TELEGRAM_TOKEN
 from agent import ask_ai
-from miner import auto_mining_loop
 from tools.wallet import address, balance
 import threading
 from miner import run_mining
-
+from miner import run_mining, auto_mining_loop
 
 AUTO = False
 thread = None
