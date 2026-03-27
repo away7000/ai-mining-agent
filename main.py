@@ -20,7 +20,22 @@ async def start(update, ctx):
 from miner import run_mining
 import threading
 
+async def mine(update, ctx):
 
+    await update.message.reply_text("mining...")
+
+    try:
+
+        from miner_contract import mine
+
+        tx = mine([0])   # block default
+
+        await update.message.reply_text(str(tx))
+
+    except Exception as e:
+
+        await update.message.reply_text(str(e))
+        
 async def mine_cmd(update, ctx):
 
     await update.message.reply_text("mining...")
@@ -98,19 +113,22 @@ async def auto(update, ctx):
     global AUTO
 
     if AUTO:
-        await update.message.reply_text("running")
+        await update.message.reply_text("already running")
         return
 
     AUTO = True
 
+    await update.message.reply_text("AI LOOP START")
+
+    import threading
+    from miner_ai import auto_ai
+
     thread = threading.Thread(
-        target=auto_loop,
+        target=auto_ai,
         daemon=True
     )
 
     thread.start()
-
-    await update.message.reply_text("AUTO START")
 
 async def stop(update, ctx):
 
