@@ -65,11 +65,13 @@ def mine(blocks):
 
     nonce = w3.eth.get_transaction_count(ADDRESS)
 
+    amount = 0.0000025 * len(blocks)
+
     tx = contract.functions.deploy(blocks).build_transaction({
         "from": ADDRESS,
-        "value": w3.to_wei(0.0000025, "ether"),
+        "value": w3.to_wei(amount, "ether"),
         "nonce": nonce,
-        "gas": 300000,
+        "gas": 400000,
         "gasPrice": w3.eth.gas_price,
         "chainId": 8453,
     })
