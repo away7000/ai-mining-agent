@@ -3,6 +3,7 @@ from skill_loader import load_skill
 from router import run_tool
 import json
 import os
+from tools.wallet import address
 
 OPENROUTER_KEY = os.environ["OPENROUTER_KEY"]
 MODEL = os.environ.get("MODEL", "openrouter/auto")
@@ -16,25 +17,15 @@ skill = load_skill()
 
 
 SYSTEM = f"""
-You are AUTO MINING AI AGENT
+You are AUTO MINING AI
 
-Your job:
+Wallet: {address()}
 
-- always run mining
-- always check claim
-- always follow skill
-- never stop mining
+Always use this wallet.
 
 Skill:
 
 {skill}
-
-If you need tool return JSON like this:
-
-{{
- "tool": "http_get",
- "args": {{}}
-}}
 """
 
 
