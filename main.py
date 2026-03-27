@@ -4,6 +4,8 @@ from agent import ask_ai
 from miner import auto_mining_loop
 from tools.wallet import address, balance
 import threading
+from miner import run_mining
+
 
 AUTO = False
 thread = None
@@ -13,26 +15,34 @@ async def start(update, ctx):
     await update.message.reply_text("Bot ready")
 
 
+from miner import run_mining
+import threading
+
+
 async def mine(update, ctx):
 
     await update.message.reply_text("mining start")
 
-    try:
-        run_mining()
-        await update.message.reply_text("mining done")
-    except Exception as e:
-        await update.message.reply_text(str(e))
+    def job():
+        try:
+            run_mining()
+            print("mining done")
+        except Exception as e:
+            print(e)
 
+    threading.Thread(target=job).start()
 
 async def claim(update, ctx):
 
     await update.message.reply_text("claim start")
 
-    try:
-        run_mining()
-        await update.message.reply_text("claim done")
-    except Exception as e:
-        await update.message.reply_text(str(e))
+    def job():
+        try:
+            run_mining()
+        except Exception as e:
+            print(e)
+
+    threading.Thread(target=job).start()
 
 
 async def status(update, ctx):
@@ -94,5 +104,11 @@ app.add_handler(MessageHandler(filters.TEXT, handle))
 
 
 print("BOT RUNNING")
+
+thread = threading.Thread(
+    target=auto_mining_loop,
+    daemon=True
+)
+thread.start()
 
 app.run_polling()
