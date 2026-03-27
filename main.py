@@ -5,6 +5,7 @@ from tools.wallet import address, balance
 import threading
 from miner import run_mining
 from miner import run_mining, auto_mining_loop
+from skill_parser import parse_skill
 
 AUTO = False
 thread = None
@@ -49,12 +50,44 @@ from tools.wallet import address, balance
 
 async def status(update, ctx):
 
-    addr = address()
-    bal = balance()
+    try:
 
-    await update.message.reply_text(
-        f"Wallet: {addr}\nBalance: {bal}"
-    )
+        addr = address()
+        bal = balance()
+
+    except:
+        addr = "?"
+        bal = "?"
+
+    try:
+
+        urls = parse_skill()
+        total = len(urls)
+
+    except:
+        total = 0
+
+    model = os.environ.get("MODEL", "?")
+    rpc = os.environ.get("RPC", "?")
+
+    loop_state = "ON" if AUTO else "OFF"
+
+    msg = f"""
+=== MINING AGENT STATUS ===
+
+Wallet: {addr}
+Balance: {bal}
+
+Loop: {loop_state}
+Endpoints: {total}
+
+Model: {model}
+RPC: {rpc}
+
+Skill: loaded
+"""
+
+    await update.message.reply_text(msg)
 
 
 async def wallet(update, ctx):
@@ -64,11 +97,8 @@ async def wallet(update, ctx):
 
 
 async def auto(update, ctx):
-    global AUTO, thread
 
-    if AUTO:
-        await update.message.reply_text("already running")
-        return
+    global AUTO
 
     AUTO = True
 
@@ -83,8 +113,11 @@ async def auto(update, ctx):
 
 
 async def stop(update, ctx):
+
     global AUTO
+
     AUTO = False
+
     await update.message.reply_text("AUTO STOP")
 
 
