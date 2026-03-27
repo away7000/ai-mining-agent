@@ -44,9 +44,17 @@ async def claim(update, ctx):
     threading.Thread(target=job).start()
 
 
+from tools.wallet import address, balance
+
+
 async def status(update, ctx):
-    res = ask_ai("status")
-    await update.message.reply_text(str(res))
+
+    addr = address()
+    bal = balance()
+
+    await update.message.reply_text(
+        f"Wallet: {addr}\nBalance: {bal}"
+    )
 
 
 async def wallet(update, ctx):
