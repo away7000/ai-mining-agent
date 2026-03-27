@@ -51,29 +51,12 @@ def ask_ai(text):
                 {"role": "system", "content": SYSTEM},
                 {"role": "user", "content": text}
             ],
-            timeout=30,
+            timeout=20,
         )
 
         msg = res.choices[0].message.content
 
     except Exception as e:
-
         return f"AI ERROR: {e}"
-
-    try:
-
-        data = json.loads(msg)
-
-        if "tool" in data:
-
-            result = run_tool(
-                data["tool"],
-                data.get("args", {})
-            )
-
-            return str(result)
-
-    except:
-        pass
 
     return msg
