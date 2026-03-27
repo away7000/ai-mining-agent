@@ -29,7 +29,7 @@ def pick_random_blocks(n):
 
     random.shuffle(blocks)
 
-    return blocks[:n]
+    return blocks[:10]
 
 
 def auto_strategy():
@@ -65,7 +65,7 @@ def auto_strategy():
 
                 n = random_count()
 
-                blocks = pick_random_blocks(n)
+                blocks = pick_random_blocks()
 
                 print("DEPLOY", blocks)
 
