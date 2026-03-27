@@ -1,14 +1,12 @@
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
 from config import TELEGRAM_TOKEN
 from agent import ask_ai
-from loop import auto_loop
-import threading
-from tools.wallet import address
 from tools.wallet import address, balance
 from miner import auto_mining_loop
 import threading
 
 AUTO = False
+thread = None
 
 
 async def start(update, ctx):
@@ -16,52 +14,31 @@ async def start(update, ctx):
 
 
 async def mine(update, ctx):
-
     res = ask_ai("mine")
-
     await update.message.reply_text(res)
 
 
 async def claim(update, ctx):
-
     res = ask_ai("claim")
-
     await update.message.reply_text(res)
 
 
 async def status(update, ctx):
-
-    res = ask_ai("status mining")
-
+    res = ask_ai("status")
     await update.message.reply_text(res)
 
 
 async def wallet(update, ctx):
-
-    addr = address()
-
-    await update.message.reply_text(
-        f"Wallet:\n{addr}"
-    )
-
-async def wallet(update, ctx):
-
     addr = address()
     bal = balance()
 
     await update.message.reply_text(
-        f"{addr}\nBalance: {bal} ETH"
+        f"{addr}\nBalance: {bal}"
     )
-    
-
-def loop_runner():
-
-    auto_loop()
 
 
 async def auto(update, ctx):
-
-    global AUTO
+    global AUTO, thread
 
     if AUTO:
         await update.message.reply_text("already running")
@@ -69,29 +46,25 @@ async def auto(update, ctx):
 
     AUTO = True
 
-    threading.Thread(
-        target=loop_runner,
+    thread = threading.Thread(
+        target=auto_mining_loop,
         daemon=True
-    ).start()
+    )
 
-    await update.message.reply_text("AUTO MINING START")
+    thread.start()
+
+    await update.message.reply_text("AUTO START")
 
 
 async def stop(update, ctx):
-
     global AUTO
-
     AUTO = False
-
     await update.message.reply_text("AUTO STOP")
 
 
 async def handle(update, ctx):
-
     text = update.message.text
-
     res = ask_ai(text)
-
     await update.message.reply_text(res)
 
 
@@ -108,12 +81,9 @@ app.add_handler(CommandHandler("stop", stop))
 app.add_handler(CommandHandler("status", status))
 app.add_handler(CommandHandler("wallet", wallet))
 
-
 app.add_handler(MessageHandler(filters.TEXT, handle))
 
-threading.Thread(
-    target=auto_mining_loop,
-    daemon=True
-).start()
+
+print("BOT RUNNING")
 
 app.run_polling()
