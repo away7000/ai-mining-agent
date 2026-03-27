@@ -14,14 +14,25 @@ async def start(update, ctx):
 
 
 async def mine(update, ctx):
-    await update.message.reply_text("mining...")
-    res = ask_ai("mine")
-    await update.message.reply_text(str(res))
+
+    await update.message.reply_text("mining start")
+
+    try:
+        run_mining()
+        await update.message.reply_text("mining done")
+    except Exception as e:
+        await update.message.reply_text(str(e))
 
 
 async def claim(update, ctx):
-    res = ask_ai("claim")
-    await update.message.reply_text(str(res))
+
+    await update.message.reply_text("claim start")
+
+    try:
+        run_mining()
+        await update.message.reply_text("claim done")
+    except Exception as e:
+        await update.message.reply_text(str(e))
 
 
 async def status(update, ctx):
