@@ -58,11 +58,9 @@ def send_tx(tx):
     return tx_hash.hex()
 
 
-def mine():
+def mine(blocks):
 
     nonce = w3.eth.get_transaction_count(ADDRESS)
-
-    blocks = [0]  # block id 0-24
 
     tx = contract.functions.deploy(blocks).build_transaction({
         "from": ADDRESS,
@@ -74,7 +72,6 @@ def mine():
     })
 
     return send_tx(tx)
-
 
 def claim_eth():
 
