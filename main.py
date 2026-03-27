@@ -7,6 +7,7 @@ from miner import run_mining
 from miner import run_mining, auto_mining_loop
 from skill_parser import parse_skill
 from miner_contract import mine, claim_eth, claim_loot
+from miner_auto import auto_loop
 
 AUTO = False
 thread = None
@@ -96,10 +97,14 @@ async def auto(update, ctx):
 
     global AUTO
 
+    if AUTO:
+        await update.message.reply_text("running")
+        return
+
     AUTO = True
 
     thread = threading.Thread(
-        target=auto_mining_loop,
+        target=auto_loop,
         daemon=True
     )
 
@@ -107,14 +112,13 @@ async def auto(update, ctx):
 
     await update.message.reply_text("AUTO START")
 
-
 async def stop(update, ctx):
 
     global AUTO
 
     AUTO = False
 
-    await update.message.reply_text("AUTO STOP")
+    await update.message.reply_text("STOP")
 
 
 async def handle(update, ctx):
