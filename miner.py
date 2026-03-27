@@ -7,6 +7,8 @@ def run_mining():
 
     urls = parse_skill()
 
+    print("URLS:", urls)
+
     for url in urls:
 
         try:
@@ -15,7 +17,7 @@ def run_mining():
 
             r = requests.get(url, timeout=10)
 
-            print(r.text[:100])
+            print("RESP:", r.status_code)
 
         except Exception as e:
 
