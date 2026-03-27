@@ -12,51 +12,23 @@ DEPLOYED = False
 
 def get_round():
 
-    return requests.get(API).json()
+    r = requests.get(API)
+
+    return r.json()
 
 
-def pick_blocks(data, n=3):
+def random_count():
 
-    blocks = data["blocks"]
+    return random.choice([1, 2, 3])
 
-    arr = []
 
-    for b in blocks:
-
-        arr.append(
-            (int(b["deployed"]), b["id"])
-        )
-
-    arr.sort()
-
-    result = []
-
-    for i in range(n):
-        result.append(arr[i][1])
-
-    return result
-    
-def pick_random_blocks(n=3):
+def pick_random_blocks(n):
 
     blocks = list(range(25))
 
     random.shuffle(blocks)
 
     return blocks[:n]
-
-def random_count():
-
-    return random.choice([1, 2, 3, 4, 5])
-
-def should_play(data):
-
-    total = int(data["totalDeployed"])
-
-    # skip if pool too small
-    if total < 1000000000000000:
-        return False
-
-    return True
 
 
 def auto_strategy():
@@ -86,18 +58,15 @@ def auto_strategy():
 
                 print("NEW ROUND")
 
-            # decide play
-            if not should_play(data):
 
-                time.sleep(2)
-                continue
-
-            # deploy near end
+            # deploy
             if remain <= 15 and remain >= 5 and not DEPLOYED:
 
-            blocks = pick_random_blocks(random_count())
+                n = random_count()
 
-            print("DEPLOY", blocks)
+                blocks = pick_random_blocks(n)
+
+                print("DEPLOY", blocks)
 
                 try:
 
@@ -105,14 +74,15 @@ def auto_strategy():
 
                     print("TX", tx)
 
-             DEPLOYED = True
+                    DEPLOYED = True
 
                 except Exception as e:
 
                     print("DEPLOY ERR", e)
 
-            # claim after end
-            if remain < 1:
+
+            # claim
+            if remain < 1 and DEPLOYED:
 
                 try:
 
@@ -124,10 +94,10 @@ def auto_strategy():
 
                     print("CLAIM ERR", e)
 
-                time.sleep(5)
 
         except Exception as e:
 
             print("LOOP ERR", e)
+
 
         time.sleep(2)
