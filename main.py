@@ -10,6 +10,7 @@ from miner_contract import mine, claim_eth, claim_loot
 from miner_auto import auto_loop
 from miner_strategy import auto_strategy
 from mineloot_api import get_rewards, get_user
+from miner_contract import mine
 
 AUTO = False
 thread = None
@@ -69,7 +70,25 @@ async def loot(update, ctx):
     tx = claim_loot()
 
     await update.message.reply_text(tx)
-    
+
+
+
+async def deploy(update, ctx):
+
+    await update.message.reply_text("deploying...")
+
+    try:
+
+        blocks = [0,1,2,3,4,5,6,7,8,9]
+
+        tx = mine(blocks)
+
+        await update.message.reply_text(str(tx))
+
+    except Exception as e:
+
+        await update.message.reply_text(str(e))
+
 async def status(update, ctx):
 
     try:
@@ -203,6 +222,8 @@ app.add_handler(CommandHandler("stop", stop))
 app.add_handler(CommandHandler("status", status))
 app.add_handler(CommandHandler("wallet", wallet))
 app.add_handler(CommandHandler("rewards", rewards))
+app.add_handler(CommandHandler("deploy", deploy))
+
 
 app.add_handler(MessageHandler(filters.TEXT, handle))
 
