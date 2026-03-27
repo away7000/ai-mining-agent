@@ -4,6 +4,9 @@ from agent import ask_ai
 from loop import auto_loop
 import threading
 from tools.wallet import address
+from tools.wallet import address, balance
+from miner import auto_mining_loop
+import threading
 
 AUTO = False
 
@@ -31,7 +34,8 @@ async def status(update, ctx):
     res = ask_ai("status mining")
 
     await update.message.reply_text(res)
-    
+
+
 async def wallet(update, ctx):
 
     addr = address()
@@ -39,6 +43,16 @@ async def wallet(update, ctx):
     await update.message.reply_text(
         f"Wallet:\n{addr}"
     )
+
+async def wallet(update, ctx):
+
+    addr = address()
+    bal = balance()
+
+    await update.message.reply_text(
+        f"{addr}\nBalance: {bal} ETH"
+    )
+    
 
 def loop_runner():
 
@@ -97,5 +111,9 @@ app.add_handler(CommandHandler("wallet", wallet))
 
 app.add_handler(MessageHandler(filters.TEXT, handle))
 
+threading.Thread(
+    target=auto_mining_loop,
+    daemon=True
+).start()
 
 app.run_polling()
