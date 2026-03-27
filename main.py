@@ -6,6 +6,7 @@ import threading
 from miner import run_mining
 from miner import run_mining, auto_mining_loop
 from skill_parser import parse_skill
+from miner_contract import mine, claim_eth, claim_loot
 
 AUTO = False
 thread = None
@@ -19,35 +20,30 @@ from miner import run_mining
 import threading
 
 
-async def mine(update, ctx):
+async def mine_cmd(update, ctx):
 
-    await update.message.reply_text("mining start")
+    await update.message.reply_text("mining...")
 
-    def job():
-        try:
-            run_mining()
-            print("mining done")
-        except Exception as e:
-            print(e)
-
-    threading.Thread(target=job).start()
+    try:
+        tx = mine()
+        await update.message.reply_text(tx)
+    except Exception as e:
+        await update.message.reply_text(str(e))
 
 async def claim(update, ctx):
 
-    await update.message.reply_text("claim start")
+    try:
+        tx = claim_eth()
+        await update.message.reply_text(tx)
+    except Exception as e:
+        await update.message.reply_text(str(e))
 
-    def job():
-        try:
-            run_mining()
-        except Exception as e:
-            print(e)
+async def loot(update, ctx):
 
-    threading.Thread(target=job).start()
+    tx = claim_loot()
 
-
-from tools.wallet import address, balance
-
-
+    await update.message.reply_text(tx)
+    
 async def status(update, ctx):
 
     try:
