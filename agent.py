@@ -1,5 +1,4 @@
 from openai import OpenAI
-from config import OPENROUTER_KEY, MODEL
 from skill_loader import load_skill
 from router import run_tool
 import json
