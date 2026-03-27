@@ -39,15 +39,22 @@ If you need tool return JSON like this:
 
 def ask_ai(text):
 
-    res = client.chat.completions.create(
-        model=MODEL,
-        messages=[
-            {"role": "system", "content": SYSTEM},
-            {"role": "user", "content": text}
-        ]
-    )
+    try:
 
-    msg = res.choices[0].message.content
+        res = client.chat.completions.create(
+            model=MODEL,
+            messages=[
+                {"role": "system", "content": SYSTEM},
+                {"role": "user", "content": text}
+            ],
+            timeout=30,
+        )
+
+        msg = res.choices[0].message.content
+
+    except Exception as e:
+
+        return f"AI ERROR: {e}"
 
     try:
 
