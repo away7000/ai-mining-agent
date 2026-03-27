@@ -9,6 +9,7 @@ from skill_parser import parse_skill
 from miner_contract import mine, claim_eth, claim_loot
 from miner_auto import auto_loop
 from miner_strategy import auto_strategy
+from mineloot_api import get_rewards, get_user
 
 AUTO = False
 thread = None
@@ -143,7 +144,36 @@ async def handle(update, ctx):
     text = update.message.text
     res = ask_ai(text)
     await update.message.reply_text(str(res))
+    
+async def rewards(update, ctx):
 
+    try:
+
+        r = get_rewards()
+        u = get_user()
+
+        eth = r["pendingETHFormatted"]
+
+        loot = r["pendingLOOT"]["netFormatted"]
+
+        wins = u["wins"]
+        rounds = u["roundsPlayed"]
+
+        msg = f"""
+=== REWARDS ===
+
+Pending ETH: {eth}
+Pending LOOT: {loot}
+
+Wins: {wins}
+Rounds: {rounds}
+"""
+
+        await update.message.reply_text(msg)
+
+    except Exception as e:
+
+        await update.message.reply_text(str(e))
 
 app = Application.builder().token(
     TELEGRAM_TOKEN
@@ -157,6 +187,7 @@ app.add_handler(CommandHandler("auto", auto))
 app.add_handler(CommandHandler("stop", stop))
 app.add_handler(CommandHandler("status", status))
 app.add_handler(CommandHandler("wallet", wallet))
+app.add_handler(CommandHandler("rewards", rewards))
 
 app.add_handler(MessageHandler(filters.TEXT, handle))
 
