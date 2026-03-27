@@ -144,7 +144,8 @@ async def handle(update, ctx):
     text = update.message.text
     res = ask_ai(text)
     await update.message.reply_text(str(res))
-    
+
+
 async def rewards(update, ctx):
 
     try:
@@ -174,7 +175,7 @@ Rounds: {rounds}
     except Exception as e:
 
         await update.message.reply_text(str(e))
-
+        
 app = Application.builder().token(
     TELEGRAM_TOKEN
 ).build()
