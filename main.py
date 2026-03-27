@@ -1,6 +1,5 @@
 import os
 from telegram.ext import Application, CommandHandler, MessageHandler, filters
-from config import TELEGRAM_TOKEN
 from agent import ask_ai
 from tools.wallet import address, balance
 import threading
