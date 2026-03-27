@@ -1,7 +1,7 @@
 import time
 import requests
 from skill_parser import parse_skill
-
+from miner import run_mining, auto_mining_loop
 
 def run_mining():
 
