@@ -7,7 +7,11 @@ import json
 
 client = OpenAI(
     api_key=OPENROUTER_KEY,
-    base_url="https://openrouter.ai/api/v1"
+    base_url="https://openrouter.ai/api/v1",
+    default_headers={
+        "HTTP-Referer": "https://localhost",
+        "X-Title": "mining-agent"
+    }
 )
 
 
