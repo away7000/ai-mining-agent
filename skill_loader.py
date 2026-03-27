@@ -1,5 +1,4 @@
 import requests
-from config import SKILL_URL
 import os
 
 SKILL_URL = os.environ["SKILL_URL"]
